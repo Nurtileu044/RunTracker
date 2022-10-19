@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "773255161506",
+    "project_id": "runtracker-81d7b",
+    "storage_bucket": "runtracker-81d7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773255161506:android:1e094e93e984d0497cd9fb",
+        "android_client_info": {
+          "package_name": "kz.ablazim.runtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773255161506-7ov6e4p0ldtiuhsjltk9tcqq7co3tp13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHc5RDDNXZgVLfAdXp0zwNeuQFZHj7XoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773255161506-7ov6e4p0ldtiuhsjltk9tcqq7co3tp13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
