@@ -40,7 +40,7 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
         authUiState = authUiState.copy(confirmPasswordSignUp = password)
     }
 
-    private fun validateLoginForm() = authUiState.userName.isBlank() && authUiState.password.isBlank()
+    private fun validateLoginForm() = authUiState.userName.isBlank() || authUiState.password.isBlank()
 
     private fun validateSignUpForm() =
         authUiState.userNameSignUp.isBlank() && authUiState.passwordSignUp.isBlank() && authUiState.confirmPasswordSignUp.isBlank()
@@ -77,7 +77,7 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
 
     fun loginUser(context: Context) = viewModelScope.launch {
         try {
-            if (!validateLoginForm()) {
+            if (validateLoginForm()) {
                 throw IllegalArgumentException("email and password cannot be empty")
             }
             authUiState = authUiState.copy(isLoading = true)

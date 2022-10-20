@@ -32,7 +32,7 @@ class AuthRepository {
         onComplete: (Boolean) -> Unit
     ) = withContext(Dispatchers.IO) {
         Firebase.auth
-            .createUserWithEmailAndPassword(email, password)
+            .signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) onComplete(true) else onComplete(false)
             }

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -26,12 +28,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kz.ablazim.runtracker.R
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(
     modifier: Modifier = Modifier,
@@ -49,14 +55,13 @@ fun AuthScreen(
     val authUiState = authViewModel?.authUiState
     val isError = authUiState?.loginError != null
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
                 .height(IntrinsicSize.Min)
-                .width(IntrinsicSize.Max),
+                .width(IntrinsicSize.Min),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -75,6 +80,10 @@ fun AuthScreen(
                 label = {
                     Text(text = "Email")
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                ),
                 isError = isError
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -89,6 +98,10 @@ fun AuthScreen(
                     Text(text = "Password")
                 },
                 visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                ),
                 isError = isError
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -121,7 +134,7 @@ fun AuthScreen(
                 Text(
                     modifier = Modifier.weight(1f),
                     text = authUiState?.loginError ?: "unknown error",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Black, textAlign = TextAlign.End)
+                    style = TextStyle(fontSize = 14.sp, color = Color.Red, textAlign = TextAlign.End)
                 )
             }
 
