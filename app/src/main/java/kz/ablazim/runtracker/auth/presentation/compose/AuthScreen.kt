@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -23,10 +24,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -53,6 +50,7 @@ fun AuthScreen(
     onNavToHomePage: () -> Unit
 ) {
     val authUiState = authViewModel?.authUiState
+    val isLoading = authUiState?.isLoading
     val isError = authUiState?.loginError != null
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -78,7 +76,7 @@ fun AuthScreen(
                     Icon(imageVector = Icons.Default.Person, contentDescription = null)
                 },
                 label = {
-                    Text(text = "Email")
+                    Text(text = stringResource(id = R.string.email))
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
@@ -95,7 +93,7 @@ fun AuthScreen(
                     Icon(imageVector = Icons.Default.Lock, contentDescription = null)
                 },
                 label = {
-                    Text(text = "Password")
+                    Text(text = stringResource(id = R.string.password))
                 },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -130,6 +128,11 @@ fun AuthScreen(
                     )
                 }
             }
+
+            if (isLoading == true) {
+                CircularProgressIndicator(color = MaterialTheme.colors.primary, strokeWidth = 2.dp)
+            }
+
             if (isError) {
                 Text(
                     modifier = Modifier.weight(1f),

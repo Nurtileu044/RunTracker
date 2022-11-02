@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RunTracker</string>
     <string name="log_in">Log in</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
     <string name="can_not_remember_your_password">Can not remember your password?</string>
     <string name="reset_password">Reset password</string>
 </resources>
