@@ -43,15 +43,15 @@ import kz.ablazim.runtracker.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AuthScreen(
+fun SignUpPage(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel? = null,
-    onNavToSignUpPage: () -> Unit,
+    onNavToLoginPage: () -> Unit,
     onNavToHomePage: () -> Unit
 ) {
     val authUiState = authViewModel?.authUiState
     val isLoading = authUiState?.isLoading
-    val isError = authUiState?.loginError != null
+    val isError = authUiState?.signUpError != null
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -64,14 +64,14 @@ fun AuthScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(id = R.string.log_in),
+                text = stringResource(id = R.string.sign_up),
                 style = TextStyle(fontSize = 34.sp, fontWeight = FontWeight.SemiBold)
             )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = authUiState?.userName ?: "",
-                onValueChange = { authViewModel?.onUserNameChange(it) },
+                value = authUiState?.userNameSignUp ?: "",
+                onValueChange = { authViewModel?.onUserNameChangeSignUp(it) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Person, contentDescription = null)
                 },
@@ -87,8 +87,8 @@ fun AuthScreen(
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = authUiState?.password ?: "",
-                onValueChange = { authViewModel?.onPasswordChange(it) },
+                value = authUiState?.passwordSignUp ?: "",
+                onValueChange = { authViewModel?.onPasswordChangeSignUp(it) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Lock, contentDescription = null)
                 },
@@ -103,8 +103,26 @@ fun AuthScreen(
                 isError = isError
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Button(modifier = Modifier.fillMaxWidth(), onClick = { authViewModel?.loginUser(context) }) {
-                Text(text = stringResource(id = R.string.log_in), style = TextStyle(fontSize = 20.sp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = authUiState?.confirmPasswordSignUp ?: "",
+                onValueChange = { authViewModel?.onConfirmPasswordChange(it) },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.confirm_password))
+                },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hide() }
+                ),
+                isError = isError
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(modifier = Modifier.fillMaxWidth(), onClick = { authViewModel?.createUser(context) }) {
+                Text(text = stringResource(id = R.string.sign_up), style = TextStyle(fontSize = 20.sp))
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -114,14 +132,12 @@ fun AuthScreen(
             ) {
                 Text(
                     modifier = Modifier.weight(2f),
-                    text = stringResource(id = R.string.do_not_have_an_account),
+                    text = stringResource(id = R.string.already_have_an_account),
                     style = TextStyle(fontSize = 14.sp, color = Color.Black, textAlign = TextAlign.End)
                 )
-                TextButton(modifier = Modifier.weight(1f), onClick = { onNavToSignUpPage.invoke() }) {
+                TextButton(modifier = Modifier.weight(1f), onClick = { onNavToLoginPage.invoke() }) {
                     Text(
-                        modifier = Modifier.width(IntrinsicSize.Max),
-                        text = stringResource(id = R.string.create_account),
-                        maxLines = 1,
+                        text = stringResource(id = R.string.sign_in),
                         style = TextStyle(
                             fontSize = 14.sp,
                             color = MaterialTheme.colors.primary,
@@ -138,7 +154,7 @@ fun AuthScreen(
             if (isError) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = authUiState?.loginError ?: "unknown error",
+                    text = authUiState?.signUpError ?: "unknown error",
                     style = TextStyle(fontSize = 14.sp, color = Color.Red, textAlign = TextAlign.End)
                 )
             }
@@ -152,10 +168,10 @@ fun AuthScreen(
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun AuthScreenPreview() {
-    AuthScreen(onNavToSignUpPage = {}) {
+fun SignUpPreview() {
+    SignUpPage(onNavToLoginPage = { /*TODO*/ }) {
 
     }
 }

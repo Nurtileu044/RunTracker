@@ -1,7 +1,6 @@
 package kz.ablazim.runtracker.auth.presentation.compose
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,10 +11,7 @@ import kz.ablazim.runtracker.auth.data.remote.AuthRepository
 
 class AuthViewModel(private val authRepository: AuthRepository = AuthRepository()) : ViewModel() {
 
-    val currentUser = authRepository.currentUser
-
-    val hasUser: Boolean
-        get() = authRepository.hasUser()
+    val hasUser: Boolean = authRepository.hasUser()
 
     var authUiState by mutableStateOf(AuthUiState())
         private set
@@ -47,7 +43,7 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
 
     fun createUser(context: Context) = viewModelScope.launch {
         try {
-            if (!validateSignUpForm()) {
+            if (validateSignUpForm()) {
                 throw IllegalArgumentException("email and password cannot be empty")
             }
             authUiState = authUiState.copy(isLoading = true)
@@ -60,10 +56,8 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
                 password = authUiState.passwordSignUp
             ) { isSuccessful ->
                 authUiState = if (isSuccessful) {
-                    Toast.makeText(context, "Success login", Toast.LENGTH_SHORT).show()
                     authUiState.copy(isSuccessfulLogin = true)
                 } else {
-                    Toast.makeText(context, "Failed login", Toast.LENGTH_SHORT).show()
                     authUiState.copy(isSuccessfulLogin = false)
                 }
             }
@@ -87,10 +81,8 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
                 password = authUiState.password
             ) { isSuccessful ->
                 authUiState = if (isSuccessful) {
-                    Toast.makeText(context, "Success login", Toast.LENGTH_SHORT).show()
                     authUiState.copy(isSuccessfulLogin = true)
                 } else {
-                    Toast.makeText(context, "Failed login", Toast.LENGTH_SHORT).show()
                     authUiState.copy(isSuccessfulLogin = false)
                 }
             }
