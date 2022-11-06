@@ -36,11 +36,6 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
         authUiState = authUiState.copy(confirmPasswordSignUp = password)
     }
 
-    private fun validateLoginForm() = authUiState.userName.isBlank() || authUiState.password.isBlank()
-
-    private fun validateSignUpForm() =
-        authUiState.userNameSignUp.isBlank() && authUiState.passwordSignUp.isBlank() && authUiState.confirmPasswordSignUp.isBlank()
-
     fun createUser(context: Context) = viewModelScope.launch {
         try {
             if (validateSignUpForm()) {
@@ -93,6 +88,11 @@ class AuthViewModel(private val authRepository: AuthRepository = AuthRepository(
             authUiState = authUiState.copy(isLoading = false)
         }
     }
+
+    private fun validateLoginForm() = authUiState.userName.isBlank() || authUiState.password.isBlank()
+
+    private fun validateSignUpForm() =
+        authUiState.userNameSignUp.isBlank() && authUiState.passwordSignUp.isBlank() && authUiState.confirmPasswordSignUp.isBlank()
 }
 
 data class AuthUiState(
