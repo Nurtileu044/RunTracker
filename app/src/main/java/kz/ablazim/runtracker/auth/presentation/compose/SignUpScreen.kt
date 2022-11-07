@@ -52,6 +52,7 @@ fun SignUpPage(
     val authUiState = authViewModel?.authUiState
     val isLoading = authUiState?.isLoading
     val isError = authUiState?.signUpError != null
+    val isSuccessfulLogin = authUiState?.isSuccessfulLogin
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -149,6 +150,10 @@ fun SignUpPage(
 
             if (isLoading == true) {
                 CircularProgressIndicator(color = MaterialTheme.colors.primary, strokeWidth = 2.dp)
+            }
+
+            if (isSuccessfulLogin == true) {
+                onNavToHomePage.invoke()
             }
 
             if (isError) {

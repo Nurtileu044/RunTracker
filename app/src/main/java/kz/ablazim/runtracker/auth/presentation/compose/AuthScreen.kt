@@ -52,6 +52,7 @@ fun AuthScreen(
     val authUiState = authViewModel?.authUiState
     val isLoading = authUiState?.isLoading
     val isError = authUiState?.loginError != null
+    val isSuccessfulLogin = authUiState?.isSuccessfulLogin
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -135,11 +136,15 @@ fun AuthScreen(
                 CircularProgressIndicator(color = MaterialTheme.colors.primary, strokeWidth = 2.dp)
             }
 
+            if (isSuccessfulLogin == true) {
+                onNavToHomePage.invoke()
+            }
+
             if (isError) {
                 Text(
                     modifier = Modifier.weight(1f),
                     text = authUiState?.loginError ?: "unknown error",
-                    style = TextStyle(fontSize = 14.sp, color = Color.Red, textAlign = TextAlign.End)
+                    style = TextStyle(fontSize = 14.sp, color = Color.Red, textAlign = TextAlign.Center)
                 )
             }
 
