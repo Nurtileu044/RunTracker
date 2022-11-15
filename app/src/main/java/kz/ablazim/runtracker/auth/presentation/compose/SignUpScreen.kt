@@ -39,15 +39,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kz.ablazim.runtracker.R
+import kz.ablazim.runtracker.navigation.Screen
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpPage(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel? = null,
-    onNavToLoginPage: () -> Unit,
-    onNavToHomePage: () -> Unit
+    navController: NavController
 ) {
     val authUiState = authViewModel?.authUiState
     val isLoading = authUiState?.isLoading
@@ -136,7 +138,7 @@ fun SignUpPage(
                     text = stringResource(id = R.string.already_have_an_account),
                     style = TextStyle(fontSize = 14.sp, color = Color.Black, textAlign = TextAlign.End)
                 )
-                TextButton(modifier = Modifier.weight(1f), onClick = { onNavToLoginPage.invoke() }) {
+                TextButton(modifier = Modifier.weight(1f), onClick = { navController.navigate(Screen.SignIn.route) }) {
                     Text(
                         text = stringResource(id = R.string.sign_in),
                         style = TextStyle(
@@ -153,7 +155,7 @@ fun SignUpPage(
             }
 
             if (isSuccessfulLogin == true) {
-                onNavToHomePage.invoke()
+                navController.navigate(Screen.Home.route)
             }
 
             if (isError) {
@@ -166,7 +168,7 @@ fun SignUpPage(
 
             LaunchedEffect(key1 = authViewModel?.hasUser) {
                 if (authViewModel?.hasUser == true) {
-                    onNavToHomePage()
+                    navController.navigate(Screen.Home.route)
                 }
             }
         }
@@ -176,7 +178,5 @@ fun SignUpPage(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpPreview() {
-    SignUpPage(onNavToLoginPage = { /*TODO*/ }) {
-
-    }
+    SignUpPage(navController = rememberNavController())
 }

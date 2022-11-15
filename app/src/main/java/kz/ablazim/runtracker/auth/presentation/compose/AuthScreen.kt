@@ -39,15 +39,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kz.ablazim.runtracker.R
+import kz.ablazim.runtracker.navigation.Screen
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AuthScreen(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel? = null,
-    onNavToSignUpPage: () -> Unit,
-    onNavToHomePage: () -> Unit
+    navController: NavController
 ) {
     val authUiState = authViewModel?.authUiState
     val isLoading = authUiState?.isLoading
@@ -118,7 +120,7 @@ fun AuthScreen(
                     text = stringResource(id = R.string.do_not_have_an_account),
                     style = TextStyle(fontSize = 14.sp, color = Color.Black, textAlign = TextAlign.End)
                 )
-                TextButton(modifier = Modifier.weight(1f), onClick = { onNavToSignUpPage.invoke() }) {
+                TextButton(modifier = Modifier.weight(1f), onClick = { navController.navigate(Screen.SignUp.route) }) {
                     Text(
                         modifier = Modifier.width(IntrinsicSize.Max),
                         text = stringResource(id = R.string.create_account),
@@ -137,7 +139,7 @@ fun AuthScreen(
             }
 
             if (isSuccessfulLogin == true) {
-                onNavToHomePage.invoke()
+                navController.navigate(Screen.Home.route)
             }
 
             if (isError) {
@@ -150,7 +152,7 @@ fun AuthScreen(
 
             LaunchedEffect(key1 = authViewModel?.hasUser) {
                 if (authViewModel?.hasUser == true) {
-                    onNavToHomePage()
+                    navController.navigate(Screen.Home.route)
                 }
             }
         }
@@ -160,7 +162,5 @@ fun AuthScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun AuthScreenPreview() {
-    AuthScreen(onNavToSignUpPage = {}) {
-
-    }
+    AuthScreen(navController = rememberNavController())
 }
